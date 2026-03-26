@@ -1,0 +1,87 @@
+!DOCTYPE html>
+<html>
+<head>
+  <title>Admin - Global Express</title>
+
+  <style>
+    body { font-family: Arial; background:#111; color:white; padding:20px; }
+
+    input, select, button {
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border-radius:8px;
+      border:none;
+    }
+
+    .box {
+      background:#222;
+      padding:20px;
+      border-radius:10px;
+      max-width:400px;
+      margin:auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box" id="login">
+  <h3>Admin Login</h3>
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div class="box" id="admin" style="display:none;">
+  <h3>Update Tracking</h3>
+
+  <input id="code" placeholder="Tracking Code">
+  <input id="origin" placeholder="Origin">
+  <input id="destination" placeholder="Destination">
+  <input id="location" placeholder="Current Location">
+
+  <select id="status">
+    <option>Shipped</option>
+    <option>In Transit</option>
+    <option>On Hold</option>
+    <option>Delivered</option>
+  </select>
+
+  <input id="fee" placeholder="Fee (optional)">
+
+  <button onclick="save()">Save</button>
+</div>
+
+<script>
+function login() {
+  if (
+    document.getElementById("user").value === "admin" &&
+    document.getElementById("pass").value === "admin123"
+  ) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("admin").style.display = "block";
+  } else {
+    alert("Wrong login");
+  }
+}
+
+function save() {
+  let code = document.getElementById("code").value;
+
+  let data = {
+    origin: document.getElementById("origin").value,
+    destination: document.getElementById("destination").value,
+    location: document.getElementById("location").value,
+    status: document.getElementById("status").value,
+    fee: document.getElementById("fee").value,
+    date: new Date().toDateString()
+  };
+
+  localStorage.setItem(code, JSON.stringify(data));
+  alert("Saved Successfully!");
+}>
+</script>
+
+</body>
+</html>
