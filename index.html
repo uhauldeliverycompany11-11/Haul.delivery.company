@@ -1,0 +1,200 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Boy Alone Logistics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f0f0f;
+    color:white;
+}
+
+.container{
+    max-width:360px;
+    margin:auto;
+    padding:15px;
+}
+
+h1{
+    text-align:center;
+    color:#c77dff;
+    font-size:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-top:10px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background:linear-gradient(to right,#6a00f4,#a100ff);
+    border:none;
+    color:white;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.result{
+    margin-top:20px;
+}
+
+.timeline{
+    position:relative;
+    margin-top:20px;
+    padding-left:25px;
+}
+
+.timeline::before{
+    content:"";
+    position:absolute;
+    left:10px;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:#444;
+}
+
+.step{
+    position:relative;
+    margin-bottom:25px;
+}
+
+.step::before{
+    content:"";
+    position:absolute;
+    left:-17px;
+    top:5px;
+    width:12px;
+    height:12px;
+    background:#555;
+    border-radius:50%;
+}
+
+.step.active::before{
+    background:#00bfff;
+    box-shadow:0 0 6px #00bfff;
+}
+
+.title{
+    font-weight:bold;
+}
+
+.small{
+    font-size:13px;
+    color:#bbb;
+}
+
+.hold{
+    color:#ff4d4d;
+}
+
+.alert{
+    margin-top:15px;
+    color:#ff4d4d;
+    font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Boy Alone Logistics</h1>
+
+<input id="track" placeholder="Enter Tracking Code">
+<button onclick="track()">Track Package</button>
+
+<div id="output" class="result"></div>
+
+</div>
+
+<script>
+
+let data = {
+    code:"00000008JHR",
+    from:"Loma 642 Villa Diego Villarreal 66550, NLE MEX",
+    to:"5757 W Century Blvd, Los Angeles, CA 90045",
+    status:"On Hold",
+    location:"California International Airport",
+    fee:100,
+    date:"Thu Mar 26 2026"
+};
+
+function track(){
+
+    let val = document.getElementById("track").value;
+
+    if(val !== data.code){
+        alert("Wrong tracking number");
+        return;
+    }
+
+    function active(s){
+        return data.status === s ? "active" : "";
+    }
+
+    let message = "";
+
+    if(data.status === "On Hold"){
+        message = `
+        <div class="alert">
+        ⚠ Your package is currently on hold at California International Airport.<br>
+        Reason: Clearance fee required.<br>
+        Pay $${data.fee} to continue delivery.
+        </div>`;
+    }
+
+    document.getElementById("output").innerHTML = `
+    
+    <h3>${data.code}</h3>
+
+    <p><b>From:</b><br>${data.from}</p>
+    <p><b>To:</b><br>${data.to}</p>
+
+    <div class="timeline">
+
+        <div class="step ${active("Picked Up")}">
+            <div class="title">Picked Up</div>
+            <div class="small">${data.location}</div>
+        </div>
+
+        <div class="step ${active("In Transit")}">
+            <div class="title">In Transit</div>
+            <div class="small">${data.location}</div>
+        </div>
+
+        <div class="step ${active("On Hold")} hold">
+            <div class="title">On Hold</div>
+            <div class="small">${data.location}</div>
+        </div>
+
+        <div class="step ${active("Out for Delivery")}">
+            <div class="title">Out for Delivery</div>
+            <div class="small">${data.location}</div>
+        </div>
+
+    </div>
+
+    <p class="small"><b>Current Location:</b> ${data.location}</p>
+    <p class="small"><b>Date:</b> ${data.date}</p>
+
+    ${message}
+    `;
+}
+
+</script>
+
+</body>
+</html>
